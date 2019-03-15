@@ -28,11 +28,15 @@ router.get('/students/new',function(req,res){
 })
 
 router.post('/students/new',function(req,res){
-	var student=req.body
+	var student=parseInteger(req.body)
+
 	fs.readFile(path,'utf8',function(err,data){
 		if(err) throw err
+
 		var students= JSON.parse(data).Students
+
 		student.id=students[students.length-1].id+1
+
 		students.push(student)
 		var ret=JSON.stringify({
 			Students:students
@@ -90,7 +94,8 @@ router.get('/students/edit',function(req,res){
 
 router.post('/students/edit',function(req,res){
 
-	var student=req.body
+	var student=parseInteger(req.body)
+
 	
 	fs.readFile(path,'utf8',function(err,data){
 		if(err) throw err
@@ -113,4 +118,10 @@ router.post('/students/edit',function(req,res){
 	}) 
 })
 
+function parseInteger(student){
+	student.id=parseInt(student.id)
+	student.age=parseInt(student.age)
+	student.gender=parseInt(student.gender)
+	return student
+}
 module.exports=router
